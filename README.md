@@ -8,11 +8,13 @@ Convert ABC radio streams to mp3
 
 # Building
 
+ * Make sure `$GOPATH` is set and `$GOPATH/src` exists!
+ * `git clone git@github.com:sinner-/abc2mp3.git $GOPATH/src/github.com/sinner-/abc2mp3`
  * `go install github.com/sinner-/abc2mp3`
 
 ## Usage
 
- * Make sure that PATH includes $GOBIN!
+ * Make sure that `$PATH` includes `$GOBIN`!
  * I mostly just use this for the Triple J Hip Hop Show, e.g. `abc2mp3 -showdate 2017-01-12`.
  * Find your encoded mp3 in `$HOME/Downloads/hip-1-2017-01-12.mp3` on successful execution.
 
