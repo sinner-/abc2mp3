@@ -90,7 +90,7 @@ func main() {
 
     baseUrl := flag.String("baseurl", "http://abcradiomodhls.abc-cdn.net.au/i/triplej/audio", "ABC Radio CDN URL.")
     show := flag.String("show", "hip", "Defaults to Triple J HipHop Show.")
-    showNum := flag.Int("shownum", 1, "Normally just one show per week.")
+    showNum := flag.Int("shownum", 1, "Normally just one show per week. Set to 0 to ignore.")
     showDate := flag.String("showdate", "REQUIRED", "[REQUIRED] Date in format YYYY-MM-DD.")
     showFormat := flag.String("showformat", "m4a", "Format of stream stored on CDN.")
     streamSuffix := flag.String("streamsuffix", "_0_a.ts", "Suffix of stream segments stored on CDN.")
@@ -104,9 +104,16 @@ func main() {
         return
     }
 
-    workDir := fmt.Sprintf("%s/%s-%d-%s", *downloadDir, *show, *showNum, *showDate)
+    var fileName string
+    if *showNum == 0 {
+        fileName = fmt.Sprintf("%s-%s", *show, *showDate)
+    } else {
+        fileName = fmt.Sprintf("%s-%d-%s", *show, *showNum, *showDate)
+    }
 
-    totalBytes, err := downloadSegments(workDir, *numSegments, fmt.Sprintf("%s/%s-%d-%s.%s", *baseUrl, *show, *showNum, *showDate, *showFormat), *streamSuffix)
+    workDir := fmt.Sprintf("%s/%s", *downloadDir, fileName)
+
+    totalBytes, err := downloadSegments(workDir, *numSegments, fmt.Sprintf("%s/%s.%s", *baseUrl, fileName, *showFormat), *streamSuffix)
     if err != nil {
         fmt.Println("Error downloading segments", "-", err)
         cleanUp(workDir)
@@ -127,7 +134,7 @@ func main() {
         fmt.Println(string(concatOutput))
     }
 
-    encodeCmd := exec.Command(*ffmpegPath, "-i", outputTSPath, "-safe", "0", "-f", "mp3", "-acodec", "mp3", fmt.Sprintf("%s/%s-%d-%s.mp3", *downloadDir, *show, *showNum, *showDate))
+    encodeCmd := exec.Command(*ffmpegPath, "-i", outputTSPath, "-safe", "0", "-f", "mp3", "-acodec", "mp3", fmt.Sprintf("%s/%s.mp3", *downloadDir, fileName))
     encodeOutput, err := encodeCmd.CombinedOutput()
     if err != nil {
         os.Stderr.WriteString(fmt.Sprintf("Encode error: %s\n",err.Error()))
