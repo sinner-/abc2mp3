@@ -39,3 +39,6 @@ Usage of abc2mp3:
   -streamsuffix string
         Suffix of stream segments stored on CDN. (default "_0_a.ts")
 ```
+
+## Download DoubleJ Something Different
+  * `abc2mp3 -baseurl http://abcradiomodhls.abc-cdn.net.au/i/doublej/audio -show som -shownum 0 -numsegments 720 -showdate 2017-06-06`
