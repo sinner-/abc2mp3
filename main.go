@@ -59,7 +59,7 @@ func downloadSegments(workDir string, numSegments int, downloadUrl string, strea
         fmt.Printf("Downloading url: %s...", url)
         bytesWritten, err := downloadSegment(url, fileName)
 
-        if err != nil {
+        if err != nil  && segment < 2 {
             fmt.Println("Segment download failed, breaking", "-", err)
             return totalBytes, err
         }
@@ -95,7 +95,7 @@ func main() {
     showFormat := flag.String("showformat", "m4a", "Format of stream stored on CDN.")
     streamSuffix := flag.String("streamsuffix", "_0_a.ts", "Suffix of stream segments stored on CDN.")
     downloadDir := flag.String("downloaddir", fmt.Sprintf("%s/Downloads", usr.HomeDir), "Directory to download mp3 to.")
-    numSegments := flag.Int("numsegments", 1081, "Number of 10s segments in a show.")
+    numSegments := flag.Int("numsegments", 1080, "Number of 10s segments in a show.")
     ffmpegPath := flag.String("ffmpegpath", "/usr/bin/ffmpeg", "ffmpeg binary path.")
     flag.Parse()
 
